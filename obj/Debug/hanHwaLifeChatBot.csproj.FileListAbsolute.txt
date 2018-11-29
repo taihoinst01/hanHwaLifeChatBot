@@ -1,0 +1,59 @@
+C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\hanHwaLifeChatBot.csprojAssemblyReference.cache
+C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\hanHwaLifeChatBot.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Bot Application.dll.config
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Bot Application.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Bot Application.pdb
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Autofac.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Castle.Core.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Chronic.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.Autofac.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Bot.Connector.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Rest.ClientRuntime.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Moq.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Newtonsoft.Json.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.Net.Http.Formatting.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.Web.Http.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.Web.Http.WebHost.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Autofac.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Castle.Core.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.Autofac.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Bot.Connector.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.Rest.ClientRuntime.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Microsoft.WindowsAzure.Configuration.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Moq.pdb
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Moq.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\Newtonsoft.Json.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.Net.Http.Formatting.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.Web.Http.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\System.Web.Http.WebHost.xml
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\ar\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\cs\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\de-dE\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\en\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\es\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\fa\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\fr\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\it\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\ja\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\nl\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\ru\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\hanHwaLifeChatBot.csproj.CopyComplete
+C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\Bot Application.dll
+C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\Bot Application.pdb
