@@ -192,8 +192,8 @@ namespace hanHwaLifeChatBot.DB
                 cmd.CommandText += " 	A.DLG_LANG,                             ";
                 cmd.CommandText += " 	A.DLG_TYPE,                             ";
                 cmd.CommandText += " 	A.DLG_ORDER_NO,                         ";
-                cmd.CommandText += " 	A.DLG_GROUP,                            ";
-                cmd.CommandText += " 	B.GESTURE                               ";
+                cmd.CommandText += " 	A.DLG_GROUP                            ";
+                //cmd.CommandText += " 	B.GESTURE                               ";
                 cmd.CommandText += " FROM TBL_DLG A, TBL_DLG_RELATION_LUIS B    ";
                 cmd.CommandText += " WHERE A.DLG_ID = B.DLG_ID                  ";
                 cmd.CommandText += "   AND A.DLG_ID = @dlgId                    ";
@@ -210,7 +210,7 @@ namespace hanHwaLifeChatBot.DB
                     dlg.dlgGroup        = rdr["DLG_GROUP"] as string;
                     dlg.dlgOrderNo      = rdr["DLG_ORDER_NO"] as string;
                     //2018-04-25 : 제스처 추가
-                    dlg.gesture         = Convert.ToInt32(rdr["gesture"]);
+                    //dlg.gesture         = Convert.ToInt32(rdr["gesture"]);
 
                     using (SqlConnection conn2 = new SqlConnection(connStr))
                     {
@@ -264,7 +264,7 @@ namespace hanHwaLifeChatBot.DB
                                 //dlgCard.card_order_no = rdr2["CARD_ORDER_NO"] as string;
                                 dlgCard.card_order_no = Convert.ToInt32(rdr2["CARD_ORDER_NO"]);
                                 //2018-04-25 : 제스처 추가
-                                dlgCard.gesture = dlg.gesture;
+                                //dlgCard.gesture = dlg.gesture;
 
                                 dialogCards.Add(dlgCard);
                             }
@@ -522,6 +522,58 @@ namespace hanHwaLifeChatBot.DB
             return result;
         }
 
+
+
+        public CacheList CacheDataFromIntent(string intent)
+        {
+            SqlDataReader rdr = null;
+            CacheList result = new CacheList();
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText += "SELECT LUIS_ID, LUIS_INTENT, LUIS_ENTITIES, '' AS LUIS_INTENT_SCORE FROM TBL_DLG_RELATION_LUIS WHERE LUIS_INTENT=@intent";
+
+                cmd.Parameters.AddWithValue("@intent", intent);
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                /*
+                if (rdr.Read())
+                {
+                    Debug.WriteLine("* YES - TBL_QUERY_ANALYSIS_RESULT");
+                }
+                else
+                {
+                    Debug.WriteLine("* NO - TBL_QUERY_ANALYSIS_RESULT");
+                }
+                */
+
+                while (rdr.Read())
+                {
+                    string luisId = rdr["LUIS_ID"] as String;
+                    string intentId = rdr["LUIS_INTENT"] as String;
+                    string entitiesId = rdr["LUIS_ENTITIES"] as String;
+                    string luisScore = rdr["LUIS_INTENT_SCORE"] as String;
+                    //string luisEntitiesValue = "" as String;
+
+                    result.luisId = luisId;
+                    result.luisIntent = intentId;
+                    result.luisEntities = entitiesId;
+                    result.luisScore = luisScore;
+                    //result.luisEntitiesValue = luisEntitiesValue;
+
+
+                    Debug.WriteLine("Yes rdr | intentId : " + intentId + " | entitiesId : " + entitiesId + " | luisScore : " + luisScore);
+                }
+
+            }
+            return result;
+        }
+
+
+
         public List<RelationList> DefineTypeChk(string luisId, string intentId, string entitiesId)
         {
             SqlDataReader rdr = null;
@@ -597,6 +649,46 @@ namespace hanHwaLifeChatBot.DB
                 cmd.CommandText += " WHERE  LUIS_ENTITIES = @entities                                                ";
 
                 Debug.WriteLine("query : " + cmd.CommandText);
+                cmd.Parameters.AddWithValue("@entities", entity);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (rdr.Read())
+                {
+                    RelationList relationList = new RelationList();
+                    relationList.luisId = rdr["LUIS_ID"] as string;
+                    relationList.luisIntent = rdr["LUIS_INTENT"] as string;
+                    relationList.luisEntities = rdr["LUIS_ENTITIES"] as string;
+                    relationList.dlgId = Convert.ToInt32(rdr["DLG_ID"]);
+                    relationList.dlgApiDefine = rdr["DLG_API_DEFINE"] as string;
+                    //relationList.apiId = Convert.ToInt32(rdr["API_ID"] ?? 0);
+                    relationList.apiId = rdr["API_ID"].Equals(DBNull.Value) ? 0 : Convert.ToInt32(rdr["API_ID"]);
+                    //DBNull.Value
+                    result.Add(relationList);
+                }
+            }
+            return result;
+        }
+
+        public List<RelationList> DefineTypeChkSpare(string intent, string entity)
+        {
+            SqlDataReader rdr = null;
+            List<RelationList> result = new List<RelationList>();
+            entity = Regex.Replace(entity, " ", "");
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText += "SELECT  LUIS_ID, LUIS_INTENT, LUIS_ENTITIES, ISNULL(DLG_ID,0) AS DLG_ID, DLG_API_DEFINE, API_ID ";
+                cmd.CommandText += "  FROM  TBL_DLG_RELATION_LUIS                                                    ";
+                //cmd.CommandText += " WHERE  LUIS_ENTITIES = @entities                                                ";
+                cmd.CommandText += " WHERE  LUIS_INTENT = @intent                                                ";
+                cmd.CommandText += " AND  LUIS_ENTITIES = @entities                                                ";
+
+                Debug.WriteLine("query : " + cmd.CommandText);
+                Debug.WriteLine("entity : " + entity);
+                Debug.WriteLine("intent : " + intent);
+                cmd.Parameters.AddWithValue("@intent", intent);
                 cmd.Parameters.AddWithValue("@entities", entity);
 
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);

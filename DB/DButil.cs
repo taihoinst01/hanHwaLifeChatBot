@@ -34,13 +34,12 @@ namespace hanHwaLifeChatBot.DB
                 JObject[] Luis_before = new JObject[MAX];
 
                 List<string[]> textList = new List<string[]>(MAX);
-                String entitiesSum = "";
 
                 for (int i = 0; i < MAX; i++)
                 {
                     //textList.Add(LUIS_APP_ID[i] +"|"+ LUIS_SUBSCRIPTION + "|" + query);
                     textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, query });
-
+                    Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
                 }
 
                 //병렬처리 시간 체크
@@ -60,6 +59,7 @@ namespace hanHwaLifeChatBot.DB
                     }
                     catch (AggregateException e)
                     {
+                        Debug.WriteLine("GetMultiLUIS error = " + e.Message);
                     }
 
                 });
@@ -67,30 +67,63 @@ namespace hanHwaLifeChatBot.DB
                 watch.Stop();
                 //Luis = Luis_before;
 
-                try
+                //try
+                //{
+                //    for (int i = 0; i < MAX; i++)
+                //    {
+                //        //엔티티 합치기
+                //        if ((int)Luis_before[i]["entities"].Count() > 0)
+                //        {
+                //            for (int j = 0; j < (int)Luis_before[i]["entities"].Count(); j++)
+                //            {
+                //                entitiesSum += (string)Luis_before[i]["entities"][j]["entity"].ToString() + ",";
+                //            }
+                //        }
+
+                //    }
+                //}
+                //catch (IndexOutOfRangeException e)
+                //{
+                //    Debug.WriteLine("error = " + e.Message);
+                //    return "";
+                //}
+
+
+                string luisEntities = "";
+                string luisIntent = "";
+                float luisScoreCompare = 0.0f;
+
+                //intent score이 제일 큰 intent 추출
+                if (MAX > 0)
                 {
                     for (int i = 0; i < MAX; i++)
                     {
-                        //엔티티 합치기
-                        if ((int)Luis_before[i]["entities"].Count() > 0)
+                        if (Luis_before[i]["intents"][0]["intent"].ToString() != "None")
                         {
-                            for (int j = 0; j < (int)Luis_before[i]["entities"].Count(); j++)
+                            if ((float)Luis_before[i]["intents"][0]["score"] > Convert.ToDouble(MessagesController.LUIS_SCORE_LIMIT))
                             {
-                                entitiesSum += (string)Luis_before[i]["entities"][j]["entity"].ToString() + ",";
+                                if ((float)Luis_before[i]["intents"][0]["score"] > luisScoreCompare)
+                                {
+                                    LuisName = returnLuisName[i];
+                                    Luis = Luis_before[i];
+                                    luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
+                                    Debug.WriteLine("GetMultiLUIS() LuisName1 : " + LuisName);
+                                }
+                                else
+                                {
+                                    //LuisName = returnLuisName[i];
+                                    //Luis = Luis_before[i];
+                                    Debug.WriteLine("GetMultiLUIS() LuisName2 : " + LuisName);
+                                }
+
                             }
                         }
 
                     }
-                }
-                catch (IndexOutOfRangeException e)
-                {
-                    Debug.WriteLine("error = " + e.Message);
-                    return "";
-                }
 
-
-                string luisEntities = "";
-                string luisType = "";
+                    Debug.WriteLine("luisScoreCompare : " + luisScoreCompare);
+                    Debug.WriteLine("LuisName : " + LuisName);
+                }
 
                 if (!String.IsNullOrEmpty(LuisName))
                 {
@@ -99,8 +132,13 @@ namespace hanHwaLifeChatBot.DB
                         float luisScore = (float)Luis["intents"][0]["score"];
                         int luisEntityCount = (int)Luis["entities"].Count();
 
+                        luisIntent = Luis["topScoringIntent"]["intent"].ToString();//add
+                        luisScore = luisScoreCompare;
+                        Debug.WriteLine("GetMultiLUIS() LUIS luisIntent : " + luisIntent);
+
                         if (MessagesController.relationList != null)
                         {
+                            Debug.WriteLine("GetMultiLUIS() relationList is not NULL");
                             if (MessagesController.relationList.Count() > 0)
                             {
                                 MessagesController.relationList[0].luisScore = (int)Luis["intents"][0]["score"];
@@ -110,19 +148,20 @@ namespace hanHwaLifeChatBot.DB
                                 MessagesController.cacheList.luisScore = Luis["intents"][0]["score"].ToString();
                             }
                         }
-
-
-
+                        /*
                         if (luisScore > Convert.ToDouble(MessagesController.LUIS_SCORE_LIMIT) && luisEntityCount > 0)
                         {
+                            Debug.WriteLine("GetMultiLUIS() luisEntityCount > 0");
                             for (int i = 0; i < luisEntityCount; i++)
                             {
                                 //luisEntities = luisEntities + Luis["entities"][i]["entity"] + ",";
-                                luisType = (string)Luis["entities"][i]["type"];
-                                luisType = Regex.Split(luisType, "::")[1];
-                                luisEntities = luisEntities + luisType + ",";
+
+                                //luisType = (string)Luis["entities"][i]["type"];
+                                //luisType = Regex.Split(luisType, "::")[1];
+                                //luisEntities = luisEntities + luisType + ",";
                             }
                         }
+                        */
                     }
 
                     if (!string.IsNullOrEmpty(luisEntities) || luisEntities.Length > 0)
@@ -148,7 +187,8 @@ namespace hanHwaLifeChatBot.DB
                     //MessagesController.cacheList.luisEntities = LuisName;
 
                 }
-                return LuisName;
+                //return LuisName;
+                return luisIntent;
             }
             catch (System.Exception e)
             {
@@ -157,16 +197,159 @@ namespace hanHwaLifeChatBot.DB
             }
         }
 
+
+
+        //public String GetMultiLUIS(string query)
+        //{
+        //    //루이스 json 선언
+        //    JObject Luis = new JObject();
+        //    string LuisName = "";
+        //    try
+        //    {
+        //        int MAX = MessagesController.LUIS_APP_ID.Count(s => s != null);
+        //        Array.Resize(ref MessagesController.LUIS_APP_ID, MAX);
+        //        Array.Resize(ref MessagesController.LUIS_NM, MAX);
+
+        //        String[] returnLuisName = new string[MAX];
+        //        JObject[] Luis_before = new JObject[MAX];
+
+        //        List<string[]> textList = new List<string[]>(MAX);
+        //        String entitiesSum = "";
+
+        //        for (int i = 0; i < MAX; i++)
+        //        {
+        //            //textList.Add(LUIS_APP_ID[i] +"|"+ LUIS_SUBSCRIPTION + "|" + query);
+        //            textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, query });
+
+        //        }
+
+        //        //병렬처리 시간 체크
+        //        System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        //        watch.Start();
+        //        Parallel.For(0, MAX, new ParallelOptions { MaxDegreeOfParallelism = MAX }, async async =>
+        //        {
+        //            var task_luis = Task<JObject>.Run(() => GetIntentFromBotLUIS(textList[async][1], textList[async][2], textList[async][3]));
+
+        //            try
+        //            {
+        //                Task.WaitAll(task_luis);
+
+        //                Luis_before[async] = task_luis.Result;
+        //                returnLuisName[async] = textList[async][0];
+
+        //            }
+        //            catch (AggregateException e)
+        //            {
+        //            }
+
+        //        });
+
+        //        watch.Stop();
+        //        //Luis = Luis_before;
+
+        //        try
+        //        {
+        //            for (int i = 0; i < MAX; i++)
+        //            {
+        //                //엔티티 합치기
+        //                if ((int)Luis_before[i]["entities"].Count() > 0)
+        //                {
+        //                    for (int j = 0; j < (int)Luis_before[i]["entities"].Count(); j++)
+        //                    {
+        //                        entitiesSum += (string)Luis_before[i]["entities"][j]["entity"].ToString() + ",";
+        //                    }
+        //                }
+
+        //            }
+        //        }
+        //        catch (IndexOutOfRangeException e)
+        //        {
+        //            Debug.WriteLine("error = " + e.Message);
+        //            return "";
+        //        }
+
+
+        //        string luisEntities = "";
+        //        string luisType = "";
+
+        //        if (!String.IsNullOrEmpty(LuisName))
+        //        {
+        //            if (Luis != null || Luis.Count > 0)
+        //            {
+        //                float luisScore = (float)Luis["intents"][0]["score"];
+        //                int luisEntityCount = (int)Luis["entities"].Count();
+
+        //                if (MessagesController.relationList != null)
+        //                {
+        //                    if (MessagesController.relationList.Count() > 0)
+        //                    {
+        //                        MessagesController.relationList[0].luisScore = (int)Luis["intents"][0]["score"];
+        //                    }
+        //                    else
+        //                    {
+        //                        MessagesController.cacheList.luisScore = Luis["intents"][0]["score"].ToString();
+        //                    }
+        //                }
+
+
+
+        //                if (luisScore > Convert.ToDouble(MessagesController.LUIS_SCORE_LIMIT) && luisEntityCount > 0)
+        //                {
+        //                    for (int i = 0; i < luisEntityCount; i++)
+        //                    {
+        //                        //luisEntities = luisEntities + Luis["entities"][i]["entity"] + ",";
+        //                        luisType = (string)Luis["entities"][i]["type"];
+        //                        luisType = Regex.Split(luisType, "::")[1];
+        //                        luisEntities = luisEntities + luisType + ",";
+        //                    }
+        //                }
+        //            }
+
+        //            if (!string.IsNullOrEmpty(luisEntities) || luisEntities.Length > 0)
+        //            {
+        //                luisEntities = luisEntities.Substring(0, luisEntities.LastIndexOf(","));
+        //                luisEntities = Regex.Replace(luisEntities, " ", "");
+
+
+        //                luisEntities = MessagesController.db.SelectArray(luisEntities);
+
+        //                if (Luis["intents"] == null)
+        //                {
+        //                    MessagesController.cacheList.luisIntent = "";
+        //                }
+        //                else
+        //                {
+        //                    MessagesController.cacheList.luisIntent = (string)Luis["intents"][0]["intent"];
+        //                }
+
+        //                MessagesController.cacheList.luisEntities = luisEntities;
+        //            }
+
+        //            //MessagesController.cacheList.luisEntities = LuisName;
+
+        //        }
+        //        return LuisName;
+        //    }
+        //    catch (System.Exception e)
+        //    {
+        //        Debug.WriteLine(e.Message);
+        //        return "";
+        //    }
+        //}
+
         private static async Task<JObject> GetIntentFromBotLUIS(string luis_app_id, string luis_subscription, string query)
         {
             JObject jsonObj = new JObject();
 
             query = Uri.EscapeDataString(query);
 
+            //string url = string.Format("https://southeastasia.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
             //string url = string.Format("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
-            string url = string.Format("https://southeastasia.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
+            string url = string.Format("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
 
-            Debug.WriteLine("LUIS URL : " + url);
+
+            Debug.WriteLine("-----LUIS URL 보기");
+            Debug.WriteLine("-----LUIS URL : " + url);
 
             using (HttpClient client = new HttpClient())
             {
@@ -194,7 +377,8 @@ namespace hanHwaLifeChatBot.DB
                         for (currentRetry = 0; currentRetry < retryCount; currentRetry++)
                         {
                             //테스용 url 설정
-                            string url_re = string.Format("https://southeastasia.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
+                            //string url_re = string.Format("https://southeastasia.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
+                            string url_re = string.Format("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", luis_app_id, luis_subscription, query);
                             HttpResponseMessage msg_re = await client.GetAsync(url_re, cts.Token);
 
                             if (msg_re.IsSuccessStatusCode)
@@ -209,12 +393,28 @@ namespace hanHwaLifeChatBot.DB
                             else
                             {
                                 //초기화
+                                //jsonObj = JObject.Parse(@"{
+                                //    'query':'',
+                                //    'topScoringIntent':0,
+                                //    'intents':[],
+                                //    'entities':'[]'
+                                //}");
+                                Debug.WriteLine("GetIntentFromBotLUIS else print ");
                                 jsonObj = JObject.Parse(@"{
-                                    'query':'',
-                                    'topScoringIntent':0,
-                                    'intents':[],
-                                    'entities':'[]'
-                                }");
+                                                                      'query': '',
+                                                                      'topScoringIntent': {
+                                                                        'intent': 'None',
+                                                                        'score': 0.09
+                                                                      },
+                                                                      'intents': [
+                                                                        {
+                                                                          'intent': 'None',
+                                                                          'score': 0.09
+                                                                        }
+                                                                      ],
+                                                                      'entities': []
+                                                                    }
+                                                                    ");
                             }
                         }
                     }
@@ -223,14 +423,30 @@ namespace hanHwaLifeChatBot.DB
                 }
                 catch (TaskCanceledException e)
                 {
-                    Debug.WriteLine("error = " + e.Message);
+                    Debug.WriteLine("GetIntentFromBotLUIS error = " + e.Message);
                     //초기화
+                    //jsonObj = JObject.Parse(@"{
+                    //                'query':'',
+                    //                'topScoringIntent':0,
+                    //                'intents':[],
+                    //                'entities':'[]'
+                    //            }");
+
                     jsonObj = JObject.Parse(@"{
-                                    'query':'',
-                                    'topScoringIntent':0,
-                                    'intents':[],
-                                    'entities':'[]'
-                                }");
+                                                          'query': '',
+                                                          'topScoringIntent': {
+                                                            'intent': 'None',
+                                                            'score': 0.09
+                                                          },
+                                                          'intents': [
+                                                            {
+                                                              'intent': 'None',
+                                                              'score': 0.09
+                                                            }
+                                                          ],
+                                                          'entities': []
+                                                        }
+                                                        ");
 
                 }
             }
@@ -283,8 +499,8 @@ namespace hanHwaLifeChatBot.DB
                     UserHeroCard plCard = new UserHeroCard()
                     {
                         Title   = dlg.cardTitle,
-                        Text    = dlg.cardText,
-                        Gesture = dlg.gesture
+                        Text    = dlg.cardText
+                        //Gesture = dlg.gesture
                     };
                     returnAttachment = plCard.ToAttachment();
                 }
@@ -557,7 +773,7 @@ namespace hanHwaLifeChatBot.DB
                         Title = card.cardTitle,
                         Images = cardImages,
                         Buttons = cardButtons,
-                        Gesture = card.gesture //2018-04-24 : 제스처 추가
+                        //Gesture = card.gesture //2018-04-24 : 제스처 추가
                     };
                     returnAttachment = plCard.ToAttachment();
                 }
@@ -575,7 +791,7 @@ namespace hanHwaLifeChatBot.DB
                             Buttons = cardButtons,
                             Card_division = cardDiv,
                             Card_value = cardVal,
-                            Gesture = card.gesture //2018-04-24 : 제스처 추가
+                            //Gesture = card.gesture //2018-04-24 : 제스처 추가
                         };
                         returnAttachment = plCard.ToAttachment();
                     }
@@ -590,7 +806,7 @@ namespace hanHwaLifeChatBot.DB
                             Buttons = cardButtons,
                             Card_division = cardDiv,
                             Card_value = cardVal,
-                            Gesture = card.gesture //2018-04-24 : 제스처 추가
+                            //Gesture = card.gesture //2018-04-24 : 제스처 추가
                         };
                         returnAttachment = plCard.ToAttachment();
                     }

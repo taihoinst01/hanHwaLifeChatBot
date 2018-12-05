@@ -51,6 +51,8 @@ namespace hanHwaLifeChatBot
         public static int sorryMessageCnt = 0;
         public static int chatBotID = 0;
 
+        public static string luisQuery = "";
+
         public static int pagePerCardCnt = 10;
         public static int pageRotationCnt = 0;
         public static string FB_BEFORE_MENT = "";
@@ -59,6 +61,8 @@ namespace hanHwaLifeChatBot
         public static string luisId = "";
         public static string luisIntent = "";
         public static string luisEntities = "";
+        public static string luisIntentScore = "";
+        public static string dlgId = "";
         public static string queryStr = "";
         public static DateTime startTime;
 
@@ -279,128 +283,151 @@ namespace hanHwaLifeChatBot
                     }
                     else
                     {
+                        luisQuery = orgMent;
                         queryStr = orgMent;
                         //인텐트 엔티티 검출
                         //캐시 체크
-                        cashOrgMent = Regex.Replace(orgMent, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);
-                        cacheList = db.CacheChk(cashOrgMent.Replace(" ", ""));                     // 캐시 체크
+                        //cashOrgMent = Regex.Replace(orgMent, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);
+                        //cacheList = db.CacheChk(cashOrgMent.Replace(" ", ""));                     // 캐시 체크
 
+
+                        orgMent = Regex.Replace(orgMent, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);
+                        orgMent = orgMent.Replace(" ", "").ToLower();
+                        queryStr = orgMent;
+                        cacheList.luisIntent = null;
 
                         //캐시에 없을 경우
                         if (cacheList.luisIntent == null || cacheList.luisEntities == null)
                         {
                             DButil.HistoryLog("cache none : " + orgMent);
                             //루이스 체크
-                            cacheList.luisId = dbutil.GetMultiLUIS(orgMent);
+                            //cacheList.luisId = dbutil.GetMultiLUIS(orgMent);
+                            cacheList.luisIntent = dbutil.GetMultiLUIS(luisQuery);
+                            Debug.WriteLine("cacheList.luisIntent : " + cacheList.luisIntent);
+                            //Debug.WriteLine("cacheList.luisEntitiesValue : " + cacheList.luisEntitiesValue);
+                            cacheList = db.CacheDataFromIntent(cacheList.luisIntent);
                         }
 
-                        if (cacheList != null && cacheList.luisIntent != null)
-                        {
-                            if (cacheList.luisIntent.Contains("testdrive") || cacheList.luisIntent.Contains("branch"))
-                            {
-                                apiFlag = "TESTDRIVE";
-                            }
-                            else if (cacheList.luisIntent.Contains("quot"))
-                            {
-                                apiFlag = "QUOT";
-                            }
-                            else if (cacheList.luisIntent.Contains("recommend "))
-                            {
-                                apiFlag = "RECOMMEND";
-                            }
-                            else
-                            {
-                                apiFlag = "COMMON";
-                            }
-                            DButil.HistoryLog("cacheList.luisIntent : " + cacheList.luisIntent);
-                        }
+                        //if (cacheList != null && cacheList.luisIntent != null)
+                        //{
+                        //    if (cacheList.luisIntent.Contains("testdrive") || cacheList.luisIntent.Contains("branch"))
+                        //    {
+                        //        apiFlag = "TESTDRIVE";
+                        //    }
+                        //    else if (cacheList.luisIntent.Contains("quot"))
+                        //    {
+                        //        apiFlag = "QUOT";
+                        //    }
+                        //    else if (cacheList.luisIntent.Contains("recommend "))
+                        //    {
+                        //        apiFlag = "RECOMMEND";
+                        //    }
+                        //    else
+                        //    {
+                        //        apiFlag = "COMMON";
+                        //    }
+                        //    DButil.HistoryLog("cacheList.luisIntent : " + cacheList.luisIntent);
+                        //}
 
                         luisId = cacheList.luisId;
                         luisIntent = cacheList.luisIntent;
                         luisEntities = cacheList.luisEntities;
+                        luisIntentScore = cacheList.luisScore;
 
-                        String fullentity = db.SearchCommonEntities;
-                        DButil.HistoryLog("fullentity : " + fullentity);
-                        if (!string.IsNullOrEmpty(fullentity) || !fullentity.Equals(""))
+                        if (!string.IsNullOrEmpty(luisIntent))
                         {
-                            if (!String.IsNullOrEmpty(luisEntities))
-                            {
-                                //entity 길이 비교
-                                if (fullentity.Length > luisEntities.Length || luisIntent == null || luisIntent.Equals(""))
-                                {
-                                    //DefineTypeChkSpare에서는 인텐트나 루이스아이디조건 없이 엔티티만 일치하면 다이얼로그 리턴
-                                    relationList = db.DefineTypeChkSpare(fullentity);
-                                }
-                                else
-                                {
-                                    relationList = db.DefineTypeChk(MessagesController.luisId, MessagesController.luisIntent, MessagesController.luisEntities);
-                                }
-                            }
-                            else
-                            {
-                                relationList = db.DefineTypeChkSpare(fullentity);
-                            }
+                            relationList = db.DefineTypeChkSpare(cacheList.luisIntent, cacheList.luisEntities);
                         }
                         else
                         {
-
-                            if (apiFlag.Equals("COMMON"))
-                            {
-                                relationList = db.DefineTypeChkSpare(cacheList.luisEntities);
-                            }
-                            else
-                            {
-                                relationList = null;
-                            }
-
+                            relationList = null;
                         }
+
+
+                        //String fullentity = db.SearchCommonEntities;
+                        //DButil.HistoryLog("fullentity : " + fullentity);
+                        //if (!string.IsNullOrEmpty(fullentity) || !fullentity.Equals(""))
+                        //{
+                        //    if (!String.IsNullOrEmpty(luisEntities))
+                        //    {
+                        //        //entity 길이 비교
+                        //        if (fullentity.Length > luisEntities.Length || luisIntent == null || luisIntent.Equals(""))
+                        //        {
+                        //            //DefineTypeChkSpare에서는 인텐트나 루이스아이디조건 없이 엔티티만 일치하면 다이얼로그 리턴
+                        //            relationList = db.DefineTypeChkSpare(fullentity);
+                        //        }
+                        //        else
+                        //        {
+                        //            relationList = db.DefineTypeChk(MessagesController.luisId, MessagesController.luisIntent, MessagesController.luisEntities);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        relationList = db.DefineTypeChkSpare(fullentity);
+                        //    }
+                        //}
+                        //else
+                        //{
+
+                        //    if (apiFlag.Equals("COMMON"))
+                        //    {
+                        //        relationList = db.DefineTypeChkSpare(cacheList.luisEntities);
+                        //    }
+                        //    else
+                        //    {
+                        //        relationList = null;
+                        //    }
+
+                        //}
+                        //if (relationList != null)
+                        ////if (relationList.Count > 0)
+                        //{
+                        //    if (relationList.Count > 0 && relationList[0].dlgApiDefine != null)
+                        //    {
+                        //        if (relationList[0].dlgApiDefine.Equals("api testdrive"))
+                        //        {
+                        //            apiFlag = "TESTDRIVE";
+                        //        }
+                        //        else if (relationList[0].dlgApiDefine.Equals("api quot"))
+                        //        {
+                        //            apiFlag = "QUOT";
+                        //        }
+                        //        else if (relationList[0].dlgApiDefine.Equals("api recommend"))
+                        //        {
+                        //            apiFlag = "RECOMMEND";
+                        //        }
+                        //        else if (relationList[0].dlgApiDefine.Equals("D"))
+                        //        {
+                        //            apiFlag = "COMMON";
+                        //        }
+                        //        DButil.HistoryLog("relationList[0].dlgApiDefine : " + relationList[0].dlgApiDefine);
+                        //    }
+
+                        //}
+                        //else
+                        //{
+
+                        //    if (MessagesController.cacheList.luisIntent == null || apiFlag.Equals("COMMON"))
+                        //    {
+                        //        apiFlag = "";
+                        //    }
+                        //    else if (MessagesController.cacheList.luisId.Equals("hanHwaLifeChatBot_luis_01") && MessagesController.cacheList.luisIntent.Contains("quot"))
+                        //    {
+                        //        apiFlag = "QUOT";
+                        //    }
+                        //}
+
+
+                        //if (apiFlag.Equals("COMMON") && relationList.Count > 0)
                         if (relationList != null)
-                        //if (relationList.Count > 0)
-                        {
-                            if (relationList.Count > 0 && relationList[0].dlgApiDefine != null)
-                            {
-                                if (relationList[0].dlgApiDefine.Equals("api testdrive"))
-                                {
-                                    apiFlag = "TESTDRIVE";
-                                }
-                                else if (relationList[0].dlgApiDefine.Equals("api quot"))
-                                {
-                                    apiFlag = "QUOT";
-                                }
-                                else if (relationList[0].dlgApiDefine.Equals("api recommend"))
-                                {
-                                    apiFlag = "RECOMMEND";
-                                }
-                                else if (relationList[0].dlgApiDefine.Equals("D"))
-                                {
-                                    apiFlag = "COMMON";
-                                }
-                                DButil.HistoryLog("relationList[0].dlgApiDefine : " + relationList[0].dlgApiDefine);
-                            }
-
-                        }
-                        else
-                        {
-
-                            if (MessagesController.cacheList.luisIntent == null || apiFlag.Equals("COMMON"))
-                            {
-                                apiFlag = "";
-                            }
-                            else if (MessagesController.cacheList.luisId.Equals("hanHwaLifeChatBot_luis_01") && MessagesController.cacheList.luisIntent.Contains("quot"))
-                            {
-                                apiFlag = "QUOT";
-                            }
-                        }
-
-                        
-                        if (apiFlag.Equals("COMMON") && relationList.Count > 0)
                         {
 
                             //context.Call(new CommonDialog("", MessagesController.queryStr), this.ResumeAfterOptionDialog);
-                            
+                            dlgId = "";
                             for (int m = 0; m < MessagesController.relationList.Count; m++)
                             {
                                 DialogList dlg = db.SelectDialog(MessagesController.relationList[m].dlgId);
+                                dlgId += Convert.ToString(dlg.dlgId) + ",";
                                 Activity commonReply = activity.CreateReply();
                                 Attachment tempAttachment = new Attachment();
                                 DButil.HistoryLog("dlg.dlgType : " + dlg.dlgType); 
