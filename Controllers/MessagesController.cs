@@ -270,17 +270,49 @@ namespace hanHwaLifeChatBot
                     CardList bannedMsg = db.BannedChk(orgMent);
                     Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
 
+                    //if (bannedMsg.cardText != null)
+                    //{
+                    //    Activity reply_ment = activity.CreateReply();
+                    //    reply_ment.Recipient = activity.From;
+                    //    reply_ment.Type = "message";
+                    //    reply_ment.Text = bannedMsg.cardText;
+
+                    //    var reply_ment_info = await connector.Conversations.SendToConversationAsync(reply_ment);
+                    //    response = Request.CreateResponse(HttpStatusCode.OK);
+                    //    return response;
+                    //}
+
+
                     if (bannedMsg.cardText != null)
                     {
                         Activity reply_ment = activity.CreateReply();
                         reply_ment.Recipient = activity.From;
                         reply_ment.Type = "message";
-                        reply_ment.Text = bannedMsg.cardText;
+                        //reply_ment.Text = bannedMsg.cardText;
 
-                        var reply_ment_info = await connector.Conversations.SendToConversationAsync(reply_ment);
-                        response = Request.CreateResponse(HttpStatusCode.OK);
-                        return response;
+                        //var reply_ment_info = await connector.Conversations.SendToConversationAsync(reply_ment);
+                        //response = Request.CreateResponse(HttpStatusCode.OK);
+                        //return response;
+
+                        reply_ment.Attachments = new List<Attachment>();
+                        reply_ment.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+
+                        HeroCard plCard = new HeroCard()
+                        {
+
+                            Text = bannedMsg.cardText
+
+                        };
+                        Attachment plAttachment = plCard.ToAttachment();
+                        reply_ment.Attachments.Add(plAttachment);
+
+                        SetActivity(reply_ment);
+                        replyresult = "D";
+
+
                     }
+
                     else
                     {
                         luisQuery = orgMent;
