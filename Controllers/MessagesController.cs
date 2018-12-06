@@ -476,7 +476,7 @@ namespace hanHwaLifeChatBot
                             //string messgaeText = "";
 
                             Activity intentNoneReply = activity.CreateReply();
-                            Boolean sorryflag = false;
+                            //Boolean sorryflag = false;
 
 
                             if (beforeUserID != newUserID)
@@ -489,48 +489,74 @@ namespace hanHwaLifeChatBot
                             beforeMessgaeText = message.ToString();
 
                             Debug.WriteLine("SERARCH MESSAGE : " + message);
-                            //네이버 기사 검색
-                            if (sorryflag)
+
+                            Activity sorryReply = activity.CreateReply();
+                            sorryReply.Recipient = activity.From;
+                            sorryReply.Type = "message";
+                            sorryReply.Attachments = new List<Attachment>();
+                            sorryReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+                            List<TextList> text = new List<TextList>();
+                            text = db.SelectSorryDialogText("5");
+                            for (int i = 0; i < text.Count; i++)
                             {
-                                //Sorry Message 
-                                int sorryMessageCheck = db.SelectUserQueryErrorMessageCheck(activity.Conversation.Id, MessagesController.chatBotID);
-
-                                ++MessagesController.sorryMessageCnt;
-
-                                Activity sorryReply = activity.CreateReply();
-
-                                sorryReply.Recipient = activity.From;
-                                sorryReply.Type = "message";
-                                sorryReply.Attachments = new List<Attachment>();
-                                sorryReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-
-                                List<TextList> text = new List<TextList>();
-                                if (sorryMessageCheck == 0)
+                                HeroCard plCard = new HeroCard()
                                 {
-                                    text = db.SelectSorryDialogText("5");
-                                }
-                                else
-                                {
-                                    text = db.SelectSorryDialogText("6");
-                                }
+                                    Title = text[i].cardTitle,
+                                    Text = text[i].cardText
+                                };
 
-                                for (int i = 0; i < text.Count; i++)
-                                {
-                                    HeroCard plCard = new HeroCard()
-                                    {
-                                        Title = text[i].cardTitle,
-                                        Text = text[i].cardText
-                                    };
-
-                                    Attachment plAttachment = plCard.ToAttachment();
-                                    sorryReply.Attachments.Add(plAttachment);
-                                }
-
-                                SetActivity(sorryReply);
-                                //await connector.Conversations.SendToConversationAsync(sorryReply);
-                                sorryflag = false;
-                                replyresult = "D";
+                                Attachment plAttachment = plCard.ToAttachment();
+                                sorryReply.Attachments.Add(plAttachment);
                             }
+
+                            SetActivity(sorryReply);
+                            replyresult = "D";
+
+
+
+                            ////네이버 기사 검색
+                            //if (sorryflag)
+                            //{
+                            //    //Sorry Message 
+                            //    int sorryMessageCheck = db.SelectUserQueryErrorMessageCheck(activity.Conversation.Id, MessagesController.chatBotID);
+
+                            //    ++MessagesController.sorryMessageCnt;
+
+                            //    Activity sorryReply = activity.CreateReply();
+
+                            //    sorryReply.Recipient = activity.From;
+                            //    sorryReply.Type = "message";
+                            //    sorryReply.Attachments = new List<Attachment>();
+                            //    sorryReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+                            //    List<TextList> text = new List<TextList>();
+                            //    if (sorryMessageCheck == 0)
+                            //    {
+                            //        text = db.SelectSorryDialogText("5");
+                            //    }
+                            //    else
+                            //    {
+                            //        text = db.SelectSorryDialogText("6");
+                            //    }
+
+                            //    for (int i = 0; i < text.Count; i++)
+                            //    {
+                            //        HeroCard plCard = new HeroCard()
+                            //        {
+                            //            Title = text[i].cardTitle,
+                            //            Text = text[i].cardText
+                            //        };
+
+                            //        Attachment plAttachment = plCard.ToAttachment();
+                            //        sorryReply.Attachments.Add(plAttachment);
+                            //    }
+
+                            //    SetActivity(sorryReply);
+                            //    //await connector.Conversations.SendToConversationAsync(sorryReply);
+                            //    sorryflag = false;
+                            //    replyresult = "D";
+                            //}
                         }
 
                         DateTime endTime = DateTime.Now;

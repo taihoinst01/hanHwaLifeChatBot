@@ -57,3 +57,61 @@ C:\Users\User\source\repos\hanHwaLifeChatBot\bin\zh-hans\Microsoft.Bot.Builder.r
 C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\hanHwaLifeChatBot.csproj.CopyComplete
 C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\Bot Application.dll
 C:\Users\User\source\repos\hanHwaLifeChatBot\obj\Debug\Bot Application.pdb
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Bot Application.dll.config
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Bot Application.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Bot Application.pdb
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Autofac.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Castle.Core.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Chronic.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.Autofac.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Bot.Connector.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Rest.ClientRuntime.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Moq.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Newtonsoft.Json.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.Net.Http.Formatting.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.Web.Http.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.Web.Http.WebHost.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Autofac.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Castle.Core.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Bot.Builder.Autofac.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Bot.Connector.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.Rest.ClientRuntime.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Microsoft.WindowsAzure.Configuration.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Moq.pdb
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Moq.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\Newtonsoft.Json.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.Net.Http.Formatting.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.Web.Http.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\System.Web.Http.WebHost.xml
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\ar\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\cs\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\de-dE\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\en\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\es\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\fa\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\fr\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\it\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\ja\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\nl\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\ru\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\obj\Debug\hanHwaLifeChatBot.csprojResolveAssemblyReference.cache
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\obj\Debug\hanHwaLifeChatBot.csproj.CoreCompileInputs.cache
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\obj\Debug\Bot Application.dll
+C:\Users\taiho\Source\Repos\taihoinst01\hanHwaLifeChatBot\obj\Debug\Bot Application.pdb
