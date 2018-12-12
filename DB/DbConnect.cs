@@ -679,11 +679,13 @@ namespace hanHwaLifeChatBot.DB
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText += "SELECT  LUIS_ID, LUIS_INTENT, LUIS_ENTITIES, ISNULL(DLG_ID,0) AS DLG_ID, DLG_API_DEFINE, API_ID ";
-                cmd.CommandText += "  FROM  TBL_DLG_RELATION_LUIS                                                    ";
+                cmd.CommandText += "SELECT  LUIS_ID, LUIS_INTENT, LUIS_ENTITIES, ISNULL(A.DLG_ID,0) AS DLG_ID, DLG_API_DEFINE, API_ID ";
+                cmd.CommandText += "  FROM  TBL_DLG_RELATION_LUIS  A, TBL_DLG B                 ";
                 //cmd.CommandText += " WHERE  LUIS_ENTITIES = @entities                                                ";
                 cmd.CommandText += " WHERE  LUIS_INTENT = @intent                                                ";
                 cmd.CommandText += " AND  LUIS_ENTITIES = @entities                                                ";
+                cmd.CommandText += " AND A.DLG_ID = B.DLG_ID    ";
+                cmd.CommandText += " ORDER BY B.DLG_ORDER_NO    ";
 
                 Debug.WriteLine("query : " + cmd.CommandText);
                 Debug.WriteLine("entity : " + entity);
